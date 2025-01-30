@@ -10,8 +10,8 @@ class SongsHandler {
     const songId = await this._songsService.addSong(request.payload);
 
     const response = h.response({
-      status: "success",
-      message: "Lagu berhasil ditambahkan.",
+      status: 'success',
+      message: 'Lagu berhasil ditambahkan.',
       data: {
         songId,
       },
@@ -27,7 +27,7 @@ class SongsHandler {
     const songs = await this._songsService.getSongs(title, performer);
 
     return {
-      status: "success",
+      status: 'success',
       data: {
         songs,
       },
@@ -40,7 +40,7 @@ class SongsHandler {
     const song = await this._songsService.getSongById(id);
 
     return h.response({
-      status: "success",
+      status: 'success',
       data: {
         song,
       },
@@ -54,8 +54,8 @@ class SongsHandler {
     await this._songsService.editSongById(id, request.payload);
 
     return h.response({
-      status: "success",
-      message: "Lagu berhasil diperbarui.",
+      status: 'success',
+      message: 'Lagu berhasil diperbarui.',
     });
   }
 
@@ -65,8 +65,8 @@ class SongsHandler {
     await this._songsService.deleteSongById(id);
 
     return h.response({
-      status: "success",
-      message: "Album berhasil dihapus.",
+      status: 'success',
+      message: 'Album berhasil dihapus.',
     });
   }
 }

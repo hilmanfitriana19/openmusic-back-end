@@ -13,15 +13,12 @@ class AlbumsService {
     const id = `album-${nanoid(16)}`;
     const createdAt = new Date().toISOString();
     const updatedAt = createdAt;
-    console.log(id)
     const query = {
       text: 'INSERT INTO albums VALUES($1, $2, $3, $4, $5) RETURNING id;',
       values: [id, name, year, createdAt, updatedAt],
     };
 
-    console.log(query)
     const result = await this._pool.query(query);
-    console.log('result',result)
     if (!result.rows[0].id) {
       throw new InvariantError('Album gagal ditambahkan.');
     }

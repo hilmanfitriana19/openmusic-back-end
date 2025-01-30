@@ -12,8 +12,8 @@ class AlbumsHandler {
 
     const albumId = await this._albumsService.addAlbum({ name, year });
     const response = h.response({
-      status: "success",
-      message: "Album berhasil ditambahkan.",
+      status: 'success',
+      message: 'Album berhasil ditambahkan.',
       data: {
         albumId,
       },
@@ -27,7 +27,7 @@ class AlbumsHandler {
     const albums = await this._albumsService.getAlbums();
 
     return {
-      status: "success",
+      status: 'success',
       data: {
         albums,
       },
@@ -40,7 +40,7 @@ class AlbumsHandler {
     album.songs = await this._songsService.getSongByAlbumId(id);
 
     return h.response({
-      status: "success",
+      status: 'success',
       data: {
         album,
       },
@@ -54,8 +54,8 @@ class AlbumsHandler {
     await this._albumsService.editAlbumById(id, request.payload);
 
     return h.response({
-      status: "success",
-      message: "Album berhasil diperbaharui.",
+      status: 'success',
+      message: 'Album berhasil diperbaharui.',
     });
   }
 
@@ -65,8 +65,8 @@ class AlbumsHandler {
     await this._albumsService.deleteAlbumById(id);
 
     return h.response({
-      status: "success",
-      message: "Album berhasil dihapus.",
+      status: 'success',
+      message: 'Album berhasil dihapus.',
     });
   }
 }
