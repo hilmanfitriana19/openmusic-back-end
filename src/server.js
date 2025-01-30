@@ -3,28 +3,30 @@ require('dotenv').config();
 const Hapi = require('@hapi/hapi');
 const Jwt = require('@hapi/jwt');
 
+// albums
 const albums = require('./api/albums');
 const AlbumsService = require('./services/openmusic/AlbumsService');
-const albumsValidator = require('./validator/albums');
+const AlbumsValidator = require('./validator/albums');
 
+// songs
 const songs = require('./api/songs');
 const SongsService = require('./services/openmusic/SongsService');
-const songsValidator = require('./validator/songs');
+const SongsValidator = require('./validator/songs');
 
 // authentications
 const authentications = require('./api/authentications');
-const AuthenticationsService = require('./services/authentication/AuthenticationService');
+const AuthenticationsService = require('./services/authentications/AuthenticationsService');
+const AuthenticationsValidator = require('./validator/authentications');
 const TokenManager = require('./tokenize/tokenManager');
-const AuthenticationsValidator = require('./validator/authentication');
 
 // users
 const users = require('./api/users');
-const UsersService = require('./services/authentication/UserService');
+const UsersService = require('./services/authentications/UsersService');
 const UsersValidator = require('./validator/users');
 
 // playlists
 const playlists = require('./api/playlists');
-const playlistsValidator = require('./validator/playlists');
+const PlaylistsValidator = require('./validator/playlists');
 const PlaylistsService = require('./services/openmusic/PlaylistsService');
 const PlaylistsSongsService = require('./services/openmusic/PlaylistSongsService');
 const PlaylistsSongsActivitiesService = require('./services/openmusic/PlaylistSongActivitiesService');
@@ -86,14 +88,14 @@ const init = async () => {
       options: {
         AlbumsService: albumsService,
         SongsService: songsService,
-        AlbumsValidator: albumsValidator,
+        AlbumsValidator: AlbumsValidator,
       },
     },
     {
       plugin: songs,
       options: {
         SongsService: songsService,
-        SongsValidator: songsValidator,
+        SongsValidator: SongsValidator,
       },
     },
     {
@@ -103,7 +105,7 @@ const init = async () => {
         validator: UsersValidator,
       },
     },
-   {
+    {
       plugin: authentications,
       options: {
         AuthenticationsService: authenticationsService,
@@ -118,7 +120,7 @@ const init = async () => {
         PlaylistsService: playlistsService,
         PlaylistsSongsService: playlistsSongsService,
         PlaylistsSongsActivitiesService: playlistsSongsActivitiesService,
-        PlaylistsValidator: playlistsValidator,
+        PlaylistsValidator: PlaylistsValidator,
       },
     },
     {
@@ -151,7 +153,7 @@ const init = async () => {
         return h.continue;
       }
 
-      console.log('error Response',response);
+      console.log('Error Response', response);
 
       // penanganan server error sesuai kebutuhan
       const newResponse = h.response({

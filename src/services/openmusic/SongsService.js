@@ -112,7 +112,6 @@ class SongsService {
 
     return result.rows.map(mapSongsDBToModel);
   }
-
 }
 
 module.exports = SongsService;

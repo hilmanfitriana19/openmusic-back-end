@@ -7,14 +7,13 @@ class CollaborationsHandler {
     this._collaborationsService = CollaborationsService;
     this._playlistsService = PlaylistsService;
     this._collaborationsValidator = CollaborationsValidator;
-    
   }
 
   async postCollaborationHandler(request, h) {
     this._collaborationsValidator.validateCollaborationsPayload(
       request.payload
     );
-    
+
     const { id: credentialId } = request.auth.credentials;
     const { playlistId, userId } = request.payload;
     await this._playlistsService.verifyPlaylistsOwner(playlistId, credentialId);
@@ -25,8 +24,8 @@ class CollaborationsHandler {
     );
 
     const response = h.response({
-      status: "success",
-      message: "Berhasil menambahkan kolaborator",
+      status: 'success',
+      message: 'Berhasil menambahkan kolaborator',
       data: {
         collaborationId,
       },
@@ -48,8 +47,8 @@ class CollaborationsHandler {
     await this._collaborationsService.deleteCollaborator(playlistId, userId);
 
     return {
-      status: "success",
-      message: "Kolaborator berhasil dihapus",
+      status: 'success',
+      message: 'Kolaborator berhasil dihapus',
     };
   }
 }
