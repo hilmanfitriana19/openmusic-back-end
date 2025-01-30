@@ -12,19 +12,19 @@ class PlaylistsService {
 
   async verifyPlaylistsOwner(id, owner) {
     const query = {
-      text: 'SELECT owner FROM playlists WHERE id = $1',
+      text: 'SELECT owner FROM playlists WHERE id = $1;',
       values: [id],
     };
 
     const result = await this._pool.query(query);
 
     if (!result.rows.length) {
-      throw new NotFoundError('User tidak ditemukan');
+      throw new NotFoundError('User tidak ditemukan.');
     }
 
     if (result.rows[0].owner !== owner) {
       throw new AuthorizationError(
-        'Anda tidak mempunyai hak akses pada playlist ini!'
+        'Anda tidak mempunyai hak akses pada playlist ini.'
       );
     }
   }
@@ -52,7 +52,7 @@ class PlaylistsService {
     const id = `playlist-${nanoid(16)}`;
 
     const query = {
-      text: 'INSERT INTO playlists VALUES($1, $2, $3) RETURNING id',
+      text: 'INSERT INTO playlists VALUES($1, $2, $3) RETURNING id;',
       values: [id, name, owner],
     };
 
@@ -71,7 +71,7 @@ class PlaylistsService {
              FROM playlists LEFT JOIN collaborations ON collaborations.playlist_id = playlists.id 
              LEFT JOIN users ON users.id = playlists.owner 
              WHERE playlists.owner = $1 OR collaborations.user_id = $1 
-             GROUP BY (playlists.id, users.username) `,
+             GROUP BY (playlists.id, users.username);`,
       values: [owner],
     };
 
@@ -81,7 +81,7 @@ class PlaylistsService {
 
   async deletePlaylistById(id) {
     const query = {
-      text: 'DELETE FROM playlists WHERE id = $1 RETURNING id',
+      text: 'DELETE FROM playlists WHERE id = $1 RETURNING id;',
       values: [id],
     };
 

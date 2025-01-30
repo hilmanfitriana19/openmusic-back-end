@@ -9,12 +9,12 @@ class PlaylistsSongsActivitiesService {
 
   async activityAddInPlaylist(playlistId, songId, userId) {
     const songQuery = {
-      text: 'SELECT title FROM songs WHERE id = $1',
+      text: 'SELECT title FROM songs WHERE id = $1;',
       values: [songId],
     };
 
     const queryUser = {
-      text: 'SELECT username FROM users WHERE id = $1',
+      text: 'SELECT username FROM users WHERE id = $1;',
       values: [userId],
     };
 
@@ -29,7 +29,7 @@ class PlaylistsSongsActivitiesService {
 
     const query = {
       text: `INSERT INTO playlist_song_activities (id, playlist_id, song_id, song_title, user_id, username, action, time) 
-             VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+             VALUES ($1, $2, $3, $4, $5, $6, $7, $8);`,
       values: [
         id,
         playlistId,
@@ -46,12 +46,12 @@ class PlaylistsSongsActivitiesService {
 
   async activityDeleteInPlaylist(playlistId, songId, userId) {
     const songQuery = {
-      text: 'SELECT title FROM songs WHERE id = $1',
+      text: 'SELECT title FROM songs WHERE id = $1;',
       values: [songId],
     };
 
     const queryUser = {
-      text: 'SELECT username FROM users WHERE id = $1',
+      text: 'SELECT username FROM users WHERE id = $1;',
       values: [userId],
     };
 
@@ -66,7 +66,7 @@ class PlaylistsSongsActivitiesService {
 
     const query = {
       text: `INSERT INTO playlist_song_activities (id, playlist_id, song_id, song_title, user_id, username, action, time) 
-             VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+             VALUES ($1, $2, $3, $4, $5, $6, $7, $8);`,
       values: [
         id,
         playlistId,
@@ -84,14 +84,14 @@ class PlaylistsSongsActivitiesService {
 
   async getActivitiesInPlaylist(playlistId) {
     const query = {
-      text: 'SELECT * FROM playlist_song_activities WHERE playlist_id = $1',
+      text: 'SELECT * FROM playlist_song_activities WHERE playlist_id = $1;',
       values: [playlistId],
     };
 
     const result = await this._pool.query(query);
 
     if (!result.rows.length) {
-      throw new NotFoundError('Tidak ada aktivitas playlist');
+      throw new NotFoundError('Tidak ada aktivitas playlist.');
     }
 
     const resultMap = result.rows.map((data) => ({

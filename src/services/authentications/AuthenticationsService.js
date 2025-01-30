@@ -11,14 +11,14 @@ class AuthenticationsService {
 
   async verifyRefreshToken(token) {
     const query = {
-      text: 'SELECT token FROM authentications WHERE token = $1',
+      text: 'SELECT token FROM authentications WHERE token = $1;',
       values: [token],
     };
 
     const result = await this._pool.query(query);
 
     if (!result.rows.length) {
-      throw new InvariantError('Refresh token tidak valid');
+      throw new InvariantError('Refresh token tidak valid.');
     }
   }
 
@@ -26,7 +26,7 @@ class AuthenticationsService {
     const createdAt = new Date().toISOString();
 
     const query = {
-      text: 'INSERT INTO authentications VALUES($1,$2)',
+      text: 'INSERT INTO authentications VALUES($1,$2);',
       values: [token, createdAt],
     };
 
@@ -35,7 +35,7 @@ class AuthenticationsService {
 
   async deleteRefreshToken(token) {
     const query = {
-      text: 'DELETE FROM authentications WHERE token = $1',
+      text: 'DELETE FROM authentications WHERE token = $1;',
       values: [token],
     };
 
@@ -44,13 +44,13 @@ class AuthenticationsService {
 
   async verifyUserCredential(username, password) {
     const query = {
-      text: 'SELECT id, password FROM users WHERE username = $1',
+      text: 'SELECT id, password FROM users WHERE username = $1;',
       values: [username],
     };
     const result = await this._pool.query(query);
 
     if (!result.rows.length) {
-      throw new AuthenticationError('Kredensial yang Anda berikan salah');
+      throw new AuthenticationError('Kredensial yang Anda berikan salah.');
     }
 
     const { id, password: hashedPassword } = result.rows[0];
@@ -58,7 +58,7 @@ class AuthenticationsService {
     const match = await bcrypt.compare(password, hashedPassword);
 
     if (!match) {
-      throw new AuthenticationError('Kredensial yang Anda berikan salah');
+      throw new AuthenticationError('Kredensial yang Anda berikan salah.');
     }
     return id;
   }

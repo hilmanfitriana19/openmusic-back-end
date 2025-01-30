@@ -17,28 +17,28 @@ class UsersService {
     const createdAt = new Date().toISOString();
 
     const query = {
-      text: 'INSERT INTO users VALUES($1, $2, $3, $4, $5, $6) RETURNING id',
+      text: 'INSERT INTO users VALUES($1, $2, $3, $4, $5, $6) RETURNING id;',
       values: [id, username, hashedPassword, fullname, createdAt, createdAt],
     };
 
     const result = await this._pool.query(query);
 
     if (!result.rows.length) {
-      throw new InvariantError('User gagal ditambahkan');
+      throw new InvariantError('User gagal ditambahkan.');
     }
     return result.rows[0].id;
   }
 
   async getUserById(userId) {
     const query = {
-      text: 'SELECT id, username, fullname FROM users WHERE id = $1',
+      text: 'SELECT id, username, fullname FROM users WHERE id = $1;',
       values: [userId],
     };
 
     const result = await this._pool.query(query);
 
     if (!result.rows.length) {
-      throw new NotFoundError('User tidak ditemukan');
+      throw new NotFoundError('User tidak ditemukan.');
     }
 
     return result.rows[0];
@@ -46,7 +46,7 @@ class UsersService {
 
   async verifyNewUsername(username) {
     const query = {
-      text: 'SELECT username FROM users WHERE username = $1',
+      text: 'SELECT username FROM users WHERE username = $1;',
       values: [username],
     };
 
@@ -61,7 +61,7 @@ class UsersService {
 
   async getUsersByUsername(username) {
     const query = {
-      text: 'SELECT id, username, fullname FROM users WHERE username LIKE $1',
+      text: 'SELECT id, username, fullname FROM users WHERE username LIKE $1;',
       values: [`%${username}%`],
     };
     const result = await this._pool.query(query);
