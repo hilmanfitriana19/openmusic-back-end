@@ -89,7 +89,7 @@ class PlaylistsService {
 
     if (!result.rows.length) {
       throw new NotFoundError(
-        'Playlist gagal dihapus karena id tidak ditemukan.'
+        'Playlist gagal dihapus, data tidak ditemukan.'
       );
     }
   }
