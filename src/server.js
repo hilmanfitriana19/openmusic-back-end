@@ -1,7 +1,9 @@
+/* eslint-disable no-unused-vars */
 require('dotenv').config();
 
 const Hapi = require('@hapi/hapi');
 const Jwt = require('@hapi/jwt');
+const path = require('path');
 
 // albums
 const albums = require('./api/albums');
@@ -36,7 +38,13 @@ const collaborations = require('./api/collaborations');
 const CollaborationsValidator = require('./validator/collaborations');
 const CollaborationsService = require('./services/openmusic/CollaborationsService');
 
+// Exports
+const _exports = require('./api/exports');
+const ProducerService = require('./services/broker/rabbitmq/ProducerService');
+const ExportsValidator = require('./validator/exports');
+
 const ClientError = require('./exceptions/ClientError');
+const StorageService = require('./services/storage/StorageService');
 
 const init = async () => {
   const albumsService = new AlbumsService();
@@ -47,6 +55,7 @@ const init = async () => {
   const playlistsService = new PlaylistsService(collaborationsService);
   const playlistsSongsService = new PlaylistsSongsService();
   const playlistsSongsActivitiesService = new PlaylistsSongsActivitiesService();
+  const storageService = new StorageService(path.resolve(__dirname, 'api/uploads/file/images'));
 
   const server = Hapi.server({
     host: process.env.HOST,
@@ -129,6 +138,13 @@ const init = async () => {
         CollaborationsService: collaborationsService,
         PlaylistsService: playlistsService,
         CollaborationsValidator: CollaborationsValidator,
+      },
+    },
+    {
+      plugin: _exports,
+      options: {
+        service: ProducerService,
+        validator: ExportsValidator,
       },
     },
   ]);
