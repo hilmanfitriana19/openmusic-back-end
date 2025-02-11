@@ -12,6 +12,10 @@ exports.up = (pgm) => {
       type: 'INTEGER',
       notNull: true,
     },
+    cover_url: {
+      type: 'VARCHAR(100)',
+      notNull: false,
+    },
     created_at: {
       type: 'TEXT',
       notNull: true,
