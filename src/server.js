@@ -3,6 +3,7 @@ require('dotenv').config();
 
 const Hapi = require('@hapi/hapi');
 const Jwt = require('@hapi/jwt');
+const Inert = require('@hapi/inert');
 const path = require('path');
 
 // albums
@@ -43,10 +44,19 @@ const _exports = require('./api/exports');
 const ProducerService = require('./services/broker/rabbitmq/ProducerService');
 const ExportsValidator = require('./validator/exports');
 
-const ClientError = require('./exceptions/ClientError');
+// uploads
 const StorageService = require('./services/storage/StorageService');
 
+// cache
+const CacheService = require('./services/cache/redis/CacheService');
+
+// AlbumUser
+const AlbumUserService = require('./services/openmusic/AlbumUserService');
+
+const ClientError = require('./exceptions/ClientError');
+
 const init = async () => {
+  const cacheService = new CacheService();
   const albumsService = new AlbumsService();
   const songsService = new SongsService();
   const authenticationsService = new AuthenticationsService();
@@ -56,6 +66,7 @@ const init = async () => {
   const playlistsSongsService = new PlaylistsSongsService();
   const playlistsSongsActivitiesService = new PlaylistsSongsActivitiesService();
   const storageService = new StorageService(path.resolve(__dirname, 'api/uploads/file/images'));
+  const albumUsersService = new AlbumUserService(cacheService);
 
   const server = Hapi.server({
     host: process.env.HOST,
@@ -71,6 +82,9 @@ const init = async () => {
   await server.register([
     {
       plugin: Jwt,
+    },
+    {
+      plugin: Inert,
     },
   ]);
 
@@ -97,7 +111,9 @@ const init = async () => {
       options: {
         AlbumsService: albumsService,
         SongsService: songsService,
+        AlbumUsersService: albumUsersService,
         AlbumsValidator: AlbumsValidator,
+        StorageService: storageService,
       },
     },
     {
@@ -110,8 +126,8 @@ const init = async () => {
     {
       plugin: users,
       options: {
-        service: usersService,
-        validator: UsersValidator,
+        UsersService: usersService,
+        UsersValidator: UsersValidator,
       },
     },
     {
@@ -143,8 +159,9 @@ const init = async () => {
     {
       plugin: _exports,
       options: {
-        service: ProducerService,
-        validator: ExportsValidator,
+        ProducerService: ProducerService,
+        PlaylistsService: playlistsService,
+        ExportsValidator: ExportsValidator,
       },
     },
   ]);

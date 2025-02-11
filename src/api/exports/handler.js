@@ -1,24 +1,28 @@
 class ExportsHandler {
-  constructor(service, validator) {
-    this._service = service;
-    this._validator = validator;
-
-    this.postExportPlaylistHandler = this.postExportPlaylistHandler.bind(this);
+  constructor(ProducerService, PlaylistsService, ExportsValidator) {
+    this._producerService = ProducerService;
+    this._playlistsService = PlaylistsService;
+    this._exportValidator = ExportsValidator;
   }
 
   async postExportPlaylistHandler(request, h) {
-    this._validator.validateExportNotesPayload(request.payload);
+    this._exportValidator.validateExportPlaylistsPayload(request.payload);
 
+    const { id: credentialId } = request.auth.credentials;
+    const { playlistId } = request.params;
+    const { targetEmail } = request.payload;
+    await this._playlistsService.verifyPlaylistsOwner(playlistId, credentialId);
     const message = {
-      userId: request.auth.credentials.id,
-      targetEmail: request.payload.targetEmail,
+      playlistId,
+      targetEmail: targetEmail,
     };
 
-    await this._service.sendMessage('export:notes', JSON.stringify(message));
+    console.log(JSON.stringify(message));
+    await this._producerService.sendMessage('export:playlist', JSON.stringify(message));
 
     const response = h.response({
       status: 'success',
-      message: 'Permintaan Anda dalam antrean',
+      message: 'Permintaan Anda dalam antrean.',
     });
     response.code(201);
     return response;
