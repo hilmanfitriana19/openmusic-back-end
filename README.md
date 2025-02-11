@@ -18,21 +18,28 @@ npm install
 
 Membuat .env dengan referensi pada .env.example
 ```bash
-# Postgresql
-PGUSER=
-PGHOST=
-PGPASSWORD=
-PGDATABASE=
-PGPORT=
+# server configuration
+HOST=host
+PORT=port
 
-# Nodemailer SMTP authentication
-MAIL_HOST=
-MAIL_PORT=
-MAIL_ADDRESS=
-MAIL_PASSWORD=
+# node-postgres configuration
+PGUSER=pguser
+PGHOST=pghost
+PGPASSWORD=password
+PGDATABASE=database_name
+PGPORT=port
+
+# security configuration
+ACCESS_TOKEN_KEY=generated_token_secret_key
+REFRESH_TOKEN_KEY=generated_refrech_token_key
+ACCESS_TOKEN_AGE=angka
 
 # Message broker
-RABBITMQ_SERVER=
+RABBITMQ_SERVER=amqp://localhost
+
+# Redis
+REDIS_SERVER=localhost
+
 ```
 
 Start Project
