@@ -90,4 +90,4 @@ lerna-debug.log
 .DS_Store
 Thumbs.db
 
-./src/api/uploads
+/src/api/uploads/file/images/*
